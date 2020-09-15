@@ -7,17 +7,17 @@ matrix = [
 
 class Matrix{
   constructor(){
+    // console.log(matrix);
     this.forwardStroke();
-    //this.output();
+    this.reverseStroke();
   }
 
 
-  forwardStroke(errorMessage = ""){
-
+  forwardStroke(errorMessage = "")
+  {
     for(let i = 0; i < matrix.length - 1; i++){
       if(!matrix[i][i])
       {
-
         if(!this.swapRows(i))
         {
           if(!this.swapColums(i))
@@ -27,26 +27,31 @@ class Matrix{
           }
         }
       }
-
-      
-      console.log(matrix);
-      for(let j = i + 1; j <matrix.length; j++)
-      {
+      for (let j = 0; j < matrix.length; j++) { // получение первой единицы
         matrix[i][j] /= matrix[i][i]
-        let coef = matrix[j][i] / matrix[i][i];
-        console.log(coef);
-        matrix[j] -= matrix[i] * coef;
       }
-      console.log(matrix);
+      for(let j = i + 1; j < matrix.length; j++) // получаем нули
+      {
+        let coef = matrix[j][i] / matrix[i][i];
+        matrix[j][i] -= matrix[i][i] * coef;
+      }
     }
     this.check(errorMessage);
+    for (let i = 0; i < matrix.length; i++) { // пелим последнюю строку на последнее число
+      for (let j = 0; j < matrix.length; j++) {
+        matrix[matrix.length - 1][j] /= matrix[matrix.length - 1][matrix.length - 1]
+      }
+    }
+    console.log(matrix);
   }
+
+
   check(errorMessage = ""){
-    for(let i = 0; i < this.matrix.length; i++)
+    for(let i = 0; i < matrix.length; i++)
     {
-      for (let j = 0; j < this.matrix.length; j++)
+      for (let j = 0; j < matrix.length; j++)
       {
-        if(this.matrix[i] == this.matrix[j])
+        if(matrix[i] == matrix[j])
         {
           errorMessage = "something wrong";
           return;
@@ -54,19 +59,32 @@ class Matrix{
       }
     }
   }
+
+  reverseStroke(errorMessage = "")
+  {
+    for(let i = matrix.length - 1; i > 0; i--)
+    {
+      for(let j = i - 1; j >= 0; j--)
+      {
+        let coef = matrix[j][i] / matrix[i][i];
+        matrix[j][i] -= matrix[i][i] * coef;
+      }
+    }
+    console.log(matrix);
+  }
   swapRows(currentIndex){
-    if(currentIndex == this.matrix.length - 1)
+    if(currentIndex == matrix.length - 1)
     {
       return false;
     }
-    let maxValue = this.matrix[currentIndex + 1][currentIndex];
+    let maxValue = matrix[currentIndex + 1][currentIndex];
     let swapIndex = currentIndex + 1;
 
-    for (let i = currentIndex + 2; i < this.matrix.length; i++)
+    for (let i = currentIndex + 2; i < matrix.length; i++)
     {
-      if(this.matrix[i][currentIndex] && maxValue < this.matrix[i][currentIndex])
+      if(matrix[i][currentIndex] && maxValue < matrix[i][currentIndex])
       {
-        maxValue = this.matrix[i][currentIndex];
+        maxValue = matrix[i][currentIndex];
         swapIndex = i;
       }
     }
@@ -74,22 +92,22 @@ class Matrix{
     {
       return false;
     }
-    swap(this.matrix[currentIndex], this.matrix[swapIndex]);
+    swap(matrix[currentIndex], matrix[swapIndex]);
     return true;
   }
   swapColums(currentIndex){
-    if(currentIndex == this.matrix.length - 1)
+    if(currentIndex == matrix.length - 1)
     {
       return false;
     }
-    let maxValue = this.matrix[currentIndex ][currentIndex + 1];
+    let maxValue = matrix[currentIndex ][currentIndex + 1];
     let swapIndex = currentIndex + 1;
 
-    for (let i = currentIndex + 2; i < this.matrix.length; i++)
+    for (let i = currentIndex + 2; i < matrix.length; i++)
     {
-      if(this.matrix[currentIndex][i] && maxValue < this.matrix[currentIndex][i])
+      if(matrix[currentIndex][i] && maxValue < matrix[currentIndex][i])
       {
-        maxValue = this.matrix[currentIndex][i];
+        maxValue = matrix[currentIndex][i];
         swapIndex = i;
       }
     }
@@ -97,15 +115,15 @@ class Matrix{
     {
       return false;
     }
-    for (let i = 0; i < this.matrix.length; i++) {
-      cswap(this.matrix[i][currentIndex], this.matrix[i][swapIndex]);
+    for (let i = 0; i < matrix.length; i++) {
+      cswap(matrix[i][currentIndex], matrix[i][swapIndex]);
 
     }
     return true;
   }
   // solveSystem(f, errorMessage, accuracy){
   //   errorMessage = " ";
-  //   if(f.length != this.matrix.length)
+  //   if(f.length != matrix.length)
   //   {
   //     errorMessage = "Не квадратная";
   //     return errorMessage;
@@ -113,7 +131,7 @@ class Matrix{
 
   // }
   // output(){
-  //   console.log(this.matrix);
+  //   console.log(matrix);
   //   console.log(f);
   // }
 
