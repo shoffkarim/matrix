@@ -1,15 +1,7 @@
-matrix = [
-  [30.1, -1.4, 10, -1.5],
-  [-3.3, 1.1, 30.1, -20.1],
-  [7.5, 1.3, 1.1, 10],
-  [1.7, 7.5, -1.8, 2.1]
-];
 
 class Matrix{
   constructor(){
-    // console.log(matrix);
-    this.forwardStroke();
-    this.reverseStroke();
+    this.solveSystem();
   }
 
 
@@ -42,7 +34,6 @@ class Matrix{
         matrix[matrix.length - 1][j] /= matrix[matrix.length - 1][matrix.length - 1]
       }
     }
-    console.log(matrix);
   }
 
 
@@ -70,7 +61,6 @@ class Matrix{
         matrix[j][i] -= matrix[i][i] * coef;
       }
     }
-    console.log(matrix);
   }
   swapRows(currentIndex){
     if(currentIndex == matrix.length - 1)
@@ -116,24 +106,72 @@ class Matrix{
       return false;
     }
     for (let i = 0; i < matrix.length; i++) {
-      cswap(matrix[i][currentIndex], matrix[i][swapIndex]);
+      swap(matrix[i][currentIndex], matrix[i][swapIndex]);
 
     }
     return true;
   }
-  // solveSystem(f, errorMessage, accuracy){
-  //   errorMessage = " ";
-  //   if(f.length != matrix.length)
-  //   {
-  //     errorMessage = "Не квадратная";
-  //     return errorMessage;
-  //   }
+  isSquare()
+  {
+    return matrix.length ? matrix.length === matrix[0].length : false
+  }
+  solveSystem(errorMessage = ""){
+    errorMessage = " ";
+    if(f.length != matrix.length)
+    {
+      errorMessage = "Не квадратная";
+      return errorMessage;
+    }
+    if(!this.isSquare())
+    {
+      errorMessage = "Не квадратная";
+      return errorMessage;
+    }
+    let e = [];
+    let prevX = [];
+    let x = [];
+
+    for (let i = 0; i < matrix.length; i++) {
+      matrix[i].push(f[i])
+    }
+    do {
+
+      this.forwardStroke(errorMessage);
+      if(errorMessage.length)
+      {
+        return errorMessage;
+      }
+
+      this.reverseStroke(errorMessage);
+      if(errorMessage.length)
+      {
+        return errorMessage;
+      }
+
+      this.check(errorMessage);
+      if(errorMessage.length)
+      {
+        return errorMessage;
+      }
+
+      for (let i = 0; i < matrix.length; i++) {
+        e[i] = matrix[length - 1];
+      }
+
+      for (let i = 0; i < matrix.length; i++) {
+        x[i] = prevX[i] + e[i];
+      }
+
+      console.log(e);
+      console.log(x);
+      console.log(prevX);
+    } while (condition);
 
   // }
   // output(){
   //   console.log(matrix);
   //   console.log(f);
-  // }
+  }
 
 }
 
@@ -143,9 +181,18 @@ function swap(a, b) {
   a = c;
 }
 
+let matrix = [
+  [30.1, -1.4, 10, -1.5],
+  [-3.3, 1.1, 30.1, -20.1],
+  [7.5, 1.3, 1.1, 10],
+  [1.7, 7.5, -1.8, 2.1]
+];
+
+let accurancy = 0.001;
 let f = [10, 1.3, 10, 1.7]
 
-let originf = f;
+let originf = f.slice();
+let originMatrix = matrix.slice();
 
 
 const Gauss = new Matrix();
