@@ -4,10 +4,9 @@ class Matrix{
     this.solveSystem();
   }
 
-
   forwardStroke(errorMessage = "")
   {
-    for(let i = 0; i < matrix.length - 1; i++){
+    for(let i = 0; i < matrix.length; i++){
       if(!matrix[i][i])
       {
         if(!this.swapRows(i))
@@ -116,7 +115,7 @@ class Matrix{
     return matrix.length ? matrix.length === matrix[0].length : false
   }
   solveSystem(errorMessage = ""){
-    errorMessage = " ";
+    errorMessage = "";
     if(f.length != matrix.length)
     {
       errorMessage = "Не квадратная";
@@ -128,49 +127,78 @@ class Matrix{
       return errorMessage;
     }
     let e = [];
+    e.length = f.length;
     let prevX = [];
+    prevX.length = f.length;
     let x = [];
+    x.length = f.length;
+
+    for (let i = 0; i < f.length; i++) {
+      e[i] = 0;
+      x[i] = 0;
+      prevX[i] = 0;
+    }
 
     for (let i = 0; i < matrix.length; i++) {
       matrix[i].push(f[i])
     }
-    do {
 
-      this.forwardStroke(errorMessage);
-      if(errorMessage.length)
+    let fLength = 2
+      do
       {
-        return errorMessage;
+        this.forwardStroke(errorMessage);
+        // if(errorMessage.length)
+        // {
+        //   return errorMessage;
+        // }
+        this.reverseStroke(errorMessage);
+        // if(errorMessage.length)
+        // {
+        //   return errorMessage;
+        // }
+
+        this.check(errorMessage);
+        // if(errorMessage.length)
+        // {
+        //   return errorMessage;
+        // }
+        for (let i = 0; i < matrix.length; i++) {
+          e[i] = matrix[i][matrix.length];
+
+        }
+
+        for (let i = 0; i < matrix.length; i++) {
+          x[i] = prevX[i] + e[i];
+        }
+
+        for (let i = 0; i < originf.length; i++) {
+          for (let j = 0; j < x.length; j++) {
+            originf[i] -= originMatrix[i][j] * x[j];
+          }
+        }
+
+        for (let i = 0; i < matrix.length; i++) {
+          matrix[i][matrix.length] = originf[i];
+        }
+
+        prevX = e.slice();
+
+
+
+        fLength--;
+
+      } while (fLength); // TODO: Написать условие проверки меньше чем accuracy
+      console.log(x)
+  }
+  getDiscrepancy(){
+    let tempMatrix = matrix.slice();
+
+    for (let i = 0; i < tempMatrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
+        f[i] -= matrix[i][j] * x[j]
       }
-
-      this.reverseStroke(errorMessage);
-      if(errorMessage.length)
-      {
-        return errorMessage;
-      }
-
-      this.check(errorMessage);
-      if(errorMessage.length)
-      {
-        return errorMessage;
-      }
-
-      for (let i = 0; i < matrix.length; i++) {
-        e[i] = matrix[length - 1];
-      }
-
-      for (let i = 0; i < matrix.length; i++) {
-        x[i] = prevX[i] + e[i];
-      }
-
-      console.log(e);
-      console.log(x);
-      console.log(prevX);
-    } while (condition);
-
-  // }
-  // output(){
-  //   console.log(matrix);
-  //   console.log(f);
+    }
+    return f;
   }
 
 }
@@ -188,11 +216,13 @@ let matrix = [
   [1.7, 7.5, -1.8, 2.1]
 ];
 
-let accurancy = 0.001;
+let accuracy = 0.001;
 let f = [10, 1.3, 10, 1.7]
 
 let originf = f.slice();
 let originMatrix = matrix.slice();
+
+let errorMessage = "";
 
 
 const Gauss = new Matrix();
