@@ -1,13 +1,17 @@
 
 class Matrix{
-  constructor(){
+  constructor(data, f, accuracy){
+    this.data = data;
+    this.f = f;
+    this.accuracy = accuracy;
+    this.errorMessage = "";
     this.solveSystem();
   }
 
   forwardStroke(errorMessage = "")
   {
-    for(let i = 0; i < matrix.length; i++){
-      if(!matrix[i][i])
+    for(let i = 0; i < this.data.length; i++){
+      if(!this.data[i][i])
       {
         if(!this.swapRows(i))
         {
@@ -18,31 +22,33 @@ class Matrix{
           }
         }
       }
-      for (let j = 0; j < 5; j++) { // получение первой единицы
-        matrix[i][j] /= matrix[i][i]
+      for (let j = 0; j < this.data.length; j++) { // получение первой единицы
+        this.data[j][i] /= this.data[i][i]
       }
-      // for(let j = i + 1; j < matrix.length; j++) // получаем нули
-      // {
-      //   let coef = matrix[j][i] / matrix[i][i];
-      //   matrix[j][i] -= matrix[i][i] * coef;
-      // }
+      console.log(this.data)
+
+      for(let j = i + 1; j < this.data.length; j++) // получаем нули
+      {
+        let coef = this.data[j][i] / this.data[i][i];
+        this.data[j][i] -= this.data[i][i] * coef;
+      }
+
     }
     this.check(errorMessage);
-    for (let i = 0; i < matrix.length; i++) { // пелим последнюю строку на последнее число
-      for (let j = 0; j < matrix.length; j++) {
-        matrix[matrix.length - 1][j] /= matrix[matrix.length - 1][matrix.length - 1]
+    for (let i = 0; i < this.data.length; i++) { // пелим последнюю строку на последнее число
+      for (let j = 0; j < this.data.length; j++) {
+        this.data[this.data.length - 1][j] /= this.data[this.data.length - 1][this.data.length - 1]
       }
     }
-    console.log(matrix)
   }
 
 
   check(errorMessage = ""){
-    for(let i = 0; i < matrix.length; i++)
+    for(let i = 0; i < this.data.length; i++)
     {
-      for (let j = 0; j < matrix.length; j++)
+      for (let j = 0; j < this.data.length; j++)
       {
-        if(matrix[i] == matrix[j])
+        if(this.data[i] == this.data[j])
         {
           errorMessage = "something wrong";
           return;
@@ -53,28 +59,28 @@ class Matrix{
 
   reverseStroke(errorMessage = "")
   {
-    for(let i = matrix.length - 1; i > 0; i--)
+    for(let i = this.data.length - 1; i > 0; i--)
     {
       for(let j = i - 1; j >= 0; j--)
       {
-        let coef = matrix[j][i] / matrix[i][i];
-        matrix[j][i] -= matrix[i][i] * coef;
+        let coef = this.data[j][i] / this.data[i][i];
+        this.data[j][i] -= this.data[i][i] * coef;
       }
     }
   }
   swapRows(currentIndex){
-    if(currentIndex == matrix.length - 1)
+    if(currentIndex == this.data.length - 1)
     {
       return false;
     }
-    let maxValue = matrix[currentIndex + 1][currentIndex];
+    let maxValue = this.data[currentIndex + 1][currentIndex];
     let swapIndex = currentIndex + 1;
 
-    for (let i = currentIndex + 2; i < matrix.length; i++)
+    for (let i = currentIndex + 2; i < this.data.length; i++)
     {
-      if(matrix[i][currentIndex] && maxValue < matrix[i][currentIndex])
+      if(this.data[i][currentIndex] && maxValue < this.data[i][currentIndex])
       {
-        maxValue = matrix[i][currentIndex];
+        maxValue = this.data[i][currentIndex];
         swapIndex = i;
       }
     }
@@ -82,22 +88,22 @@ class Matrix{
     {
       return false;
     }
-    swap(matrix[currentIndex], matrix[swapIndex]);
+    swap(this.data[currentIndex], this.data[swapIndex]);
     return true;
   }
   swapColums(currentIndex){
-    if(currentIndex == matrix.length - 1)
+    if(currentIndex == this.data.length - 1)
     {
       return false;
     }
-    let maxValue = matrix[currentIndex ][currentIndex + 1];
+    let maxValue = this.data[currentIndex ][currentIndex + 1];
     let swapIndex = currentIndex + 1;
 
-    for (let i = currentIndex + 2; i < matrix.length; i++)
+    for (let i = currentIndex + 2; i < this.data.length; i++)
     {
-      if(matrix[currentIndex][i] && maxValue < matrix[currentIndex][i])
+      if(this.data[currentIndex][i] && maxValue < this.data[currentIndex][i])
       {
-        maxValue = matrix[currentIndex][i];
+        maxValue = this.data[currentIndex][i];
         swapIndex = i;
       }
     }
@@ -105,19 +111,20 @@ class Matrix{
     {
       return false;
     }
-    for (let i = 0; i < matrix.length; i++) {
-      swap(matrix[i][currentIndex], matrix[i][swapIndex]);
+    for (let i = 0; i < this.data.length; i++) {
+      swap(this.data[i][currentIndex], this.data[i][swapIndex]);
 
     }
     return true;
   }
   isSquare()
   {
-    return matrix.length ? matrix.length === matrix[0].length : false
+    return this.data.length ? this.data.length === this.data[0].length : false
   }
   solveSystem(errorMessage = ""){
+
     errorMessage = "";
-    if(f.length != matrix.length)
+    if(f.length != this.data.length)
     {
       errorMessage = "Не квадратная";
       return errorMessage;
@@ -128,23 +135,22 @@ class Matrix{
       return errorMessage;
     }
     let e = [];
-    e.length = f.length;
+    e.length = this.f.length;
     let prevX = [];
-    prevX.length = f.length;
+    prevX.length = this.f.length;
     let x = [];
-    x.length = f.length;
+    x.length = this.f.length;
 
-    for (let i = 0; i < f.length; i++) {
+    for (let i = 0; i < this.f.length; i++) {
       e[i] = 0;
       x[i] = 0;
       prevX[i] = 0;
     }
 
-    for (let i = 0; i < matrix.length; i++) {
-      matrix[i].push(f[i])
+    for (let i = 0; i < this.data.length; i++) {
+      this.data[i].push(this.f[i])
     }
-
-    let fLength = 2
+    let fLength = 4
       do
       {
         this.forwardStroke(errorMessage);
@@ -152,6 +158,8 @@ class Matrix{
         // {
         //   return errorMessage;
         // }
+        // console.log(this.data);
+        // console.log(originMatrix)
         this.reverseStroke(errorMessage);
         // if(errorMessage.length)
         // {
@@ -163,28 +171,26 @@ class Matrix{
         // {
         //   return errorMessage;
         // }
-        for (let i = 0; i < matrix.length; i++) {
-          e[i] = matrix[i][matrix.length];
+        for (let i = 0; i < this.data.length; i++) {
+          e[i] = this.data[i][this.data.length];
 
         }
 
-        for (let i = 0; i < matrix.length; i++) {
+        for (let i = 0; i < this.data.length; i++) {
           x[i] = prevX[i] + e[i];
         }
 
-        for (let i = 0; i < originf.length; i++) {
+        for (let i = 0; i < originF.length; i++) {
           for (let j = 0; j < x.length; j++) {
-            originf[i] -= originMatrix[i][j] * x[j];
+            originF[i] -= originMatrix[i][j] * x[j];
           }
         }
 
-        for (let i = 0; i < matrix.length; i++) {
-          matrix[i][matrix.length] = originf[i];
+        for (let i = 0; i < this.data.length; i++) {
+          this.data[i][this.data.length] = originF[i];
         }
 
         prevX = e.slice();
-
-
 
         fLength--;
 
@@ -210,20 +216,25 @@ function swap(a, b) {
   a = c;
 }
 
+
+
 let matrix = [
   [30.1, -1.4, 10, -1.5],
   [-3.3, 1.1, 30.1, -20.1],
   [7.5, 1.3, 1.1, 10],
   [1.7, 7.5, -1.8, 2.1]
 ];
-
+let originMatrix = [
+  [30.1, -1.4, 10, -1.5],
+  [-3.3, 1.1, 30.1, -20.1],
+  [7.5, 1.3, 1.1, 10],
+  [1.7, 7.5, -1.8, 2.1]
+];
 let accuracy = 0.001;
 let f = [10, 1.3, 10, 1.7]
-
-let originf = f.slice();
-let originMatrix = matrix.slice();
-
-let errorMessage = "";
+let originF = [10, 1.3, 10, 1.7];
 
 
-const Gauss = new Matrix();
+
+
+const Gauss = new Matrix(matrix, f, accuracy);
