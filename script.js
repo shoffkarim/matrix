@@ -18,14 +18,14 @@ class Matrix{
           }
         }
       }
-      for (let j = 0; j < matrix.length; j++) { // получение первой единицы
+      for (let j = 0; j < 5; j++) { // получение первой единицы
         matrix[i][j] /= matrix[i][i]
       }
-      for(let j = i + 1; j < matrix.length; j++) // получаем нули
-      {
-        let coef = matrix[j][i] / matrix[i][i];
-        matrix[j][i] -= matrix[i][i] * coef;
-      }
+      // for(let j = i + 1; j < matrix.length; j++) // получаем нули
+      // {
+      //   let coef = matrix[j][i] / matrix[i][i];
+      //   matrix[j][i] -= matrix[i][i] * coef;
+      // }
     }
     this.check(errorMessage);
     for (let i = 0; i < matrix.length; i++) { // пелим последнюю строку на последнее число
@@ -33,6 +33,7 @@ class Matrix{
         matrix[matrix.length - 1][j] /= matrix[matrix.length - 1][matrix.length - 1]
       }
     }
+    console.log(matrix)
   }
 
 
