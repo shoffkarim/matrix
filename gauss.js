@@ -48,14 +48,23 @@ class Matrix {
   }
 
   reverseStroke(errorMessage){
-    console.log(this.matrix)
-    for (let i = this.matrix.length - 1; i > 0;  i--) {
-      for (let j = i - 1; j >= 0; j--) {
-        let coef = this.matrix[j][i] / this.matrix[i][i]
+    //console.log(this.matrix)
+    for (let i = this.matrix.length; i > 0;  i--) {
+      for (let j = i - 1; j >=0; j--) {
+        let coef = this.matrix[j][i]
+        // let right = multiMassiv(this.matrix[j], coef);
+        // this.matrix[j] = minusMassiv(this.matrix[i], right);
         console.log(this.matrix[j][i])
-        let right = multiMassiv(this.matrix[i], coef);
-        this.matrix[j] = minusMassiv(this.matrix[j], right);
+        //console.log(this.matrix[j]);
+
       }
+
+      // for (let j = i - 1; j >= 0; j--) {
+      //   let coef = this.matrix[j][i] / this.matrix[i][i]
+      //   console.log(this.matrix[j][i])
+      //   let right = multiMassiv(this.matrix[i], coef);
+      //   this.matrix[j] = minusMassiv(this.matrix[j], right);
+      // }
     }
   }
 
@@ -71,7 +80,7 @@ class Matrix {
     }
     this.forwardStroke(this.errorMessage);
     this.reverseStroke(this.errorMessage);
-    console.log(this.matrix);
+    //console.log(this.matrix);
   }
 }
 
