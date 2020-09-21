@@ -49,15 +49,43 @@ class Matrix {
 
   reverseStroke(errorMessage){
     //console.log(this.matrix)
-    for (let i = this.matrix.length; i > 0;  i--) {
+    // let right = [];
+    // let coef = [];
+    // for (let i = this.matrix.length - 1; i >= 0;  i--) {
+    //   //console.log(this.matrix[i].length)
+    //   for (let j = i - 1; j >=0; j--) {
+    //     right.push(this.matrix[i])
+    //   }
+    // }
+    for (let i = this.matrix.length; i >=0;  i--) {
+      //console.log(this.matrix[i].length)
       for (let j = i - 1; j >=0; j--) {
-        let coef = this.matrix[j][i]
-        // let right = multiMassiv(this.matrix[j], coef);
-        // this.matrix[j] = minusMassiv(this.matrix[i], right);
-        console.log(this.matrix[j][i])
-        //console.log(this.matrix[j]);
-
+        let coef = this.matrix[j][i];
+        if(this.matrix[i]){
+          console.log(coef)
+          let right = multiMassiv(this.matrix[i], coef);
+          this.matrix[j] = minusMassiv(this.matrix[j], right);
+        }
+        else{
+          i = this.matrix.length
+          console.log(coef)
+        }
       }
+    }
+    // console.log(right)
+    // for (let i = this.matrix.length - 1; i >= 0; i--) {
+    //   for (let j = i - 1; j >= 0; j--) {
+    //     console.log(coef[j])
+    //   }
+    // }
+    // console.log(coef)
+      // for (let j = i - 1; j >=0; j--) {
+      //   let coef = this.matrix[j][i]
+      //   // let right = multiMassiv(this.matrix[j], coef);
+      //   // this.matrix[j] = minusMassiv(this.matrix[i], right);
+      //   console.log(this.matrix[j][i])
+      //   //console.log(this.matrix[j]);
+
 
       // for (let j = i - 1; j >= 0; j--) {
       //   let coef = this.matrix[j][i] / this.matrix[i][i]
@@ -65,7 +93,8 @@ class Matrix {
       //   let right = multiMassiv(this.matrix[i], coef);
       //   this.matrix[j] = minusMassiv(this.matrix[j], right);
       // }
-    }
+
+
   }
 
   solveSystem(){
@@ -80,7 +109,7 @@ class Matrix {
     }
     this.forwardStroke(this.errorMessage);
     this.reverseStroke(this.errorMessage);
-    //console.log(this.matrix);
+    console.log(this.matrix);
   }
 }
 
