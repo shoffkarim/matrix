@@ -16,11 +16,13 @@ let originF = [10, 1.3, 10, 1.7];
 let errorMessage = "";
 
 class Matrix {
-  constructor(matrix, f, accuracy, errorMessage){
+  constructor(matrix, f, accuracy, errorMessage, originMatrix, originF){
     this.matrix = matrix;
     this.f = f;
     this.accuracy = accuracy;
     this.errorMessage = errorMessage;
+    this.originMatrix = originMatrix;
+    this.originF = originF;
     this.solveSystem();
   }
 
@@ -75,13 +77,32 @@ class Matrix {
     this.forwardStroke(this.errorMessage);
     this.reverseStroke(this.errorMessage);
     console.log("Решение системы:")
+    let ans = []
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix.length + 1; j++) {
         if(j === 4){
+          ans.push(this.matrix[i][j])
           console.log("x" + (i + 1) + " = " + this.matrix[i][j])
         }
       }
     }
+    this.disperency(ans);
+  }
+
+  disperency(ans){
+    for (let i = 0; i < this.matrix.length; i++) {
+      this.originMatrix[i].push(this.originF[i]);
+    }
+    for (let i = 0; i < ans.length; i++) {
+      for (let j = 0; j < this.matrix.length; j++) {
+        this.originF[i] -= this.originMatrix[i][j] * ans[j];
+      }
+    }
+    console.log("Невязка:");
+    for (let i = 0; i < originF.length; i++) {
+      console.log(this.originF[i] + "");
+    }
+
   }
 }
 
@@ -104,4 +125,4 @@ function multiMassiv(arr, coef){
   return res;
 }
 
-const Gauss = new Matrix(matrix, f, accuracy, errorMessage)
+const Gauss = new Matrix(matrix, f, accuracy, errorMessage, originMatrix, originF)
