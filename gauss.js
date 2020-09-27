@@ -29,23 +29,28 @@ class Matrix {
   forwardStroke(errorMessage){
     let del = [] // пустой массив делителей
     for (let i = 0; i < this.matrix.length; i++) {
-      // todo: check and swaps
+      if(!this.matrix[i][i]){
+        if(!this.swapRows(i)){
+          if(!this.swapColums(i)){
+            this.check();
+          }
+        }
+      }
 
       del.push(matrix[i][i]) // добавляем в массив делить каждой строки
       for (let j = 0; j < this.matrix.length + 1; j++) {
         this.matrix[i][j] /= del[i] // делим каждый элемент строки на делить чтобы получить единицы по диагонали
-
       }
 
       for (let j = i + 1; j < this.matrix.length; j++) {
         let coef = this.matrix[j][i] / this.matrix[i][i]
         let right = multiMassiv(this.matrix[i], coef)
         this.matrix[j] = minusMassiv(this.matrix[j], right)
-
       }
     }
+    console.log(this.matrix);
 
-    // todo: check
+    this.check()
   }
 
   reverseStroke(errorMessage){
@@ -61,21 +66,107 @@ class Matrix {
         }
       }
     }
+  }
 
+  check(){
+    for (let i = 0; i < this.matrix.length; i++) {
+      for (let j = i + 1; j < this.matrix.length; j++) {
+        if(this.matrix[i] === this.matrix[j]) {
+          console.log("Система имеет бесконечно много решений");
+        }
+      }
+    }
+  }
+
+  swapRows(curIndex){
+    if(curIndex == this.matrix.length - 1){
+      return false;
+    }
+
+    let maxValue = this.matrix[curIndex + 1][curIndex];
+    let swapIndex = curIndex + 1;
+
+    for (let i = curIndex + 2; i < this.matrix.length; i++) {
+      if(this.matrix[i][curIndex] && maxValue < this.matrix[i][curIndex]){
+        maxValue = this.matrix[i][curIndex];
+        swapIndex = i;
+      }
+    }
+
+    if(!maxValue){
+      return false;
+    }
+
+    let c = this.matrix[curIndex];
+    this.matrix[curIndex] = this.matrix[swapIndex];
+    this.matrix[swapIndex] = c;
+    return true;
+  }
+
+  swapColums(curIndex){
+    if(curIndex == this.matrix.length - 1){
+      return false;
+    }
+
+    let maxValue = this.matrix[curIndex][curIndex + 1];
+    let swapIndex = curIndex + 1;
+
+    for (let i = curIndex + 2; i < this.matrix.length; i++) {
+      if(this.matrix[curIndex][i] && maxValue < this.matrix[curIndex][i]){
+        maxValue = this.matrix[curIndex][i];
+        swapIndex = i;
+      }
+    }
+
+    if(!maxValue){
+      return false;
+    }
+
+    for (let i = 0; i < this.matrix.length; i++) {
+      let c = this.matrix[i][curIndex];
+      this.matrix[i][curIndex] = this.matrix[i][swapIndex];
+      this.matrix[i][swapIndex] = c;
+    }
+
+    return true;
   }
 
   solveSystem(){
-    let e = [];
-    let prevX = [];
-    let x = [];
-    e.length = this.f.length;
-    prevX.length = this.f.length;
-    x.length = this.f.length;
+
+    if(this.f.length != this.matrix.length){
+      console.log("Размерность вектора f и матрицы не совпадают");
+    }
+    // let e = [];
+    // let prevX = [];
+    // let x = [];
+    // e.length = this.f.length;
+    // prevX.length = this.f.length;
+    // x.length = this.f.length;
+
     for (let i = 0; i < this.matrix.length; i++) {
       this.matrix[i].push(this.f[i]);
     }
     this.forwardStroke(this.errorMessage);
     this.reverseStroke(this.errorMessage);
+
+    // for (let i = 0; i < this.matrix.length; i++) {
+    //   e[i] = this.matrix[i][this.matrix.length - 1];
+
+    // }
+    // prevX = e;
+
+    // for (let i = 0; i < x.length; i++) {
+    //   x[i] = prevX[i] + e[i];
+
+    // }
+
+    // for (let i = 0; i < this.originF.length; i++) {
+    //   for (let j = 0; j < x.length; j++) {
+    //     this.originF[i] -= this.originMatrix[i][j] * x[j];
+    //   }
+    // }
+
+
     console.log("Решение системы:")
     let ans = []
     for (let i = 0; i < this.matrix.length; i++) {
@@ -87,6 +178,7 @@ class Matrix {
       }
     }
     this.disperency(ans);
+    this.determinant(this.matrix);
   }
 
   disperency(ans){
@@ -103,6 +195,9 @@ class Matrix {
       console.log(this.originF[i] + "");
     }
 
+  }
+
+  determinant(A){
   }
 }
 
@@ -124,5 +219,6 @@ function multiMassiv(arr, coef){
   }
   return res;
 }
+
 
 const Gauss = new Matrix(matrix, f, accuracy, errorMessage, originMatrix, originF)
